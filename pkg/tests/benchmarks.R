@@ -21,7 +21,7 @@ for (be in c("local", "hadoop")) {
 ## @knitr input
   input.size = {  
     if(rmr.options('backend') == "local") 
-      10^4   
+      10^5
     else 
       10^6} 
 ## @knitr end
