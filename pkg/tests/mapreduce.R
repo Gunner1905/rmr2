@@ -162,8 +162,8 @@ for (be in c("local", "hadoop")) {
             format = make.input.format("json", key.class = "list", value.class = "data.frame")))
       isTRUE(
         all.equal(
-          df[do.call(order,df),], 
-          df1[do.call(order,df1),], 
+          df, 
+          df1, 
           tolerance = 1e-4, 
           check.attributes = FALSE))},
     generators = list(tdgg.data.frame()),
