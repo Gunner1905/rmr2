@@ -17,7 +17,6 @@
 rmr.options.env = new.env(parent=emptyenv())
 
 rmr.options.env$backend = "hadoop"
-rmr.options.env$read.size = 10^7
 rmr.options.env$profile.nodes = "off"
 rmr.options.env$dfs.tempdir = NULL # tempdir() here doesn't work!
 rmr.options.env$exclude.objects = NULL
@@ -40,7 +39,6 @@ rmr.options =
   function(
     backend = c("hadoop", "local"), 
     profile.nodes = c("off", "calls", "memory", "both"),
-    read.size = 10^7,
     dfs.tempdir = NULL,
     exclude.objects = NULL,
     backend.parameters = list()) {
@@ -49,8 +47,6 @@ rmr.options =
     is.named.arg = function(x) is.element(x, names(args))
     if(is.named.arg("backend"))
       opt.assign("backend", match.arg(backend))  
-    if(is.named.arg("read.size"))
-      opt.assign("read.size", read.size)
     if(is.named.arg("profile.nodes")) {
       if (is.logical(profile.nodes)) {
         profile.nodes = {
@@ -249,7 +245,7 @@ to.dfs =
 from.dfs = function(input, format = "native") {
   read.file = function(fname) {
     keyval.reader = 
-      make.keyval.reader(fname, format, rmr.options('read.size'))
+      make.keyval.reader(fname, format)
     retval = make.fast.list()
     kv = keyval.reader()
     while(!is.null(kv)) {

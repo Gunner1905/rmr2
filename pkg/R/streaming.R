@@ -211,7 +211,6 @@ rmr.stream =
     verbose, 
     debug) {
     pkg.opts = as.list(rmr.options.env)
-    read.size = pkg.opts$read.size
     profile.nodes = pkg.opts$profile.nodes
     
     backend.parameters = 
@@ -252,8 +251,7 @@ rmr.stream =
       function()
         rmr2:::make.keyval.reader(
           in.folder,
-          input.format, 
-          read.size = read.size)
+          input.format)
     output.writer = 
       function()
         rmr2:::make.keyval.writer(
@@ -270,8 +268,7 @@ rmr.stream =
                     list.files(path = ".", pattern = template.pattern), 
                     file.info))), 
             size > 0))[1],
-          default.input.format, 
-          read.size = read.size)
+          default.input.format)
     default.writer = 
       function(template.file) 
         rmr2:::make.keyval.writer(
@@ -345,7 +342,7 @@ rmr.stream =
         fname}
     
     default.input.format = make.input.format("native")
-    default.output.format = make.output.format("native", read.size = read.size)
+    default.output.format = make.output.format("native")
     
     libs = sub("package:", "", grep("package", search(), value = T))
     image.cmd.line = 
