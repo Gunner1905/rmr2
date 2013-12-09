@@ -496,7 +496,7 @@ make.output.format =
     backend.parameters = NULL,
     sections = NULL,
     ...) {
-    mode = match.arg
+    mode = match.arg(mode)
     args = list(...)
     if(is.character(format)) {
       format = match.arg(format, IO.formats)
