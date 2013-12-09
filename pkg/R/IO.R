@@ -56,10 +56,11 @@ text.input.format = function(con, read.size) {
   if (length(lines) == 0) NULL
   else keyval(NULL, lines)}
 
-text.output.format = function(kv, con) {
-  ser = function(k, v) paste(k, v, collapse = "", sep = "\t")
-  out = reduce.keyval(kv, ser, length.keyval(kv))
-  writeLines(paste(out, "\n", collapse="", sep = ""), sep = "", con = con)}
+text.output.format = 
+  function(kv, con) {
+    ser = function(k, v) paste(k, v, collapse = "", sep = "\t")
+    out = reduce.keyval(kv, ser, length.keyval(kv))
+    writeLines(paste(out, "\n", collapse="", sep = ""), sep = "", con = con)}
 
 make.csv.input.format = function(...) function(con, read.size) {
   df = 
