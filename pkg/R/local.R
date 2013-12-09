@@ -44,7 +44,7 @@ mr.local = function(
             unname(
               tapply(
                 1:lkv, 
-                ceiling((1:lkv)/(lkv/(object.size(kv)/10^6))), 
+                ceiling((1:lkv)/(lkv/(object.size(kv)/10^6))), #make this constant configurable?
                 function(r) {
                   kvr = slice.keyval(kv, r)
                   as.keyval(map(keys(kvr), values(kvr)))}, 
