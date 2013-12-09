@@ -264,10 +264,14 @@ split.keyval = function(kv, size, lossy = FALSE) {
           rownames(x) = NULL
         else
           names(x) = NULL
-        x = unname(rmr.split(x, ind, lossy = lossy))
-        if ((rmr.length(x) != rmr.length(k)) || 
-              is.data.frame(k))
-          x = lapply(x, key.normalize)
+        x = unique(x)
+        x = 
+          switch(
+            class(x),
+            list = x,
+            data.frame = if(lossy) t.list(x) else rmr.split(x, x , F),
+            matrix = if(lossy) t.list(as.data.frame(x)) else rmr.split(x, as.data.frame(x), F),
+            as.list(x))
         keyval(x, unname(rmr.split(v, ind, lossy = lossy)))}}}}
 
 unsplit.keyval = function(kv) {
