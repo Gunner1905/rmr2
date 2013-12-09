@@ -26,7 +26,6 @@ mr.local = function(
   verbose) {
   
   profile.nodes = rmr.options("profile.nodes")
-  read.size = rmr.options("read.size")
   get.data =
     function(fname) {
       kv = from.dfs(fname, format = input.format)
