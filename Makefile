@@ -6,3 +6,5 @@ check: $(OUTPUT)
 out/%.out:pkg/tests/%.R
 	R CMD BATCH  --vanilla --slave $<  $@
 
+clean:
+	rm $(OUTPUT)
