@@ -106,7 +106,7 @@ map.loop =
       if(length.keyval(out) > 0) {
         if(is.function(combine)) {
           if(!vectorized) {
-            increment.counter("rmr", "reduce calls", length.keyval(kv))
+            increment.counter("rmr", "reduce calls", rmr.length(unique(keys(kv))))
             out = apply.reduce(out, combine.as.kv)}
           else {
             increment.counter("rmr", "reduce calls", 1)
@@ -145,7 +145,7 @@ reduce.loop =
       complete = slice.keyval(kv, !last.key.mask)
       if(length.keyval(complete) > 0) {
         if(!vectorized) {
-          increment.counter("rmr", "reduce calls", length.keyval(complete))
+          increment.counter("rmr", "reduce calls", rmr.length(unique(keys(complete))))
           out = apply.reduce(complete, red.as.kv)}
         else {
           increment.counter("rmr", "reduce calls", 1)
@@ -155,7 +155,7 @@ reduce.loop =
       kv = keyval.reader()}
     if(!is.null(straddler)){
       if(!vectorized) {
-        increment.counter("rmr", "reduce calls", length.keyval(straddler))
+        increment.counter("rmr", "reduce calls",  rmr.length(unique(keys((straddler)))))
         out = apply.reduce(straddler, red.as.kv)}
       else{
         increment.counter("rmr", "reduce calls", 1)
