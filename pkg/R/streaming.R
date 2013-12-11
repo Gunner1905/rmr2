@@ -260,14 +260,6 @@ rmr.stream =
     default.reader = 
       function(template.pattern) 
         rmr2:::make.keyval.reader(
-          rownames(
-            subset(
-              as.data.frame(
-                t(
-                  sapply(
-                    list.files(path = ".", pattern = template.pattern), 
-                    file.info))), 
-            size > 0))[1],
           default.input.format)
     default.writer = 
       function(template.file) 
