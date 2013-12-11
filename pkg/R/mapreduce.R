@@ -180,6 +180,27 @@ dfs.mkdir =
     else
       dir.create(fname)}
 
+dfs.du = 
+  function(fname, pattern = NULL) {
+    fname = to.dfs.path(fname)
+    lst = 
+      if (rmr.options('backend') == 'hadoop') {
+        fi = as.data.frame(hdfs.ls(fname))
+        data.frame(
+          path = as.character(fi[, 8]), 
+          size = as.numeric(levels(fi[, 5]))[as.integer(fi[, 5])], 
+          stringsAsFactors = FALSE)} 
+    else {
+      fi = file.info(list.files(fname, full.names=TRUE))
+      data.frame(
+        path = rownames(fi), 
+        size = fi$size,
+        stringsAsFactors = FALSE)}
+    if(is.null(pattern))
+      lst
+    else
+      lst[grep(lst$path, pattern = pattern),]}
+
 # dfs bridge
 
 to.dfs.path = 
