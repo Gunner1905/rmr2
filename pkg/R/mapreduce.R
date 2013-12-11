@@ -452,9 +452,10 @@ equijoin =
     map.left = to.map(identity), 
     map.right = to.map(identity), 
     reduce  = reduce.default) { 
-    
-    stopifnot(xor(!is.null(left.input), !is.null(input) &&
-                    (is.null(left.input) == is.null(right.input))))
+    stopifnot(
+      xor(
+        !is.null(left.input), !is.null(input) &&
+          (is.null(left.input) == is.null(right.input))))
     outer = match.arg(outer)
     left.outer = outer == "left"
     right.outer = outer == "right"
@@ -468,7 +469,6 @@ equijoin =
                lapply(values(kv),
                       function(v) {
                         list(val = v, is.left = is.left)}))}
- 
     is.left.side = 
       function(left.input) {
         rmr.normalize.path(to.dfs.path(left.input)) ==
