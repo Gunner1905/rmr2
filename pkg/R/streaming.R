@@ -258,23 +258,26 @@ rmr.stream =
           out.folder,
           output.format)
     default.reader = 
-      function(template.pattern) 
+      function(pattern) 
         rmr2:::make.keyval.reader(
+          pattern,
           default.input.format)
     default.writer = 
-      function(template.file) 
+      function(pattern) 
         rmr2:::make.keyval.writer(
-          template.file,
+          pattern,
           default.output.format)
-    map.pattern = paste("rmr2-map-template", rmr2:::current.job(), sep = "-")
-    map.template = paste("./", map.pattern, "-", rmr2:::current.task(), sep = "")
-    combine.pattern = paste("rmr2-combine-template", rmr2:::current.job(), sep = "-")
-    combine.template = paste("./", combine.pattern, "-", rmr2:::current.task(), sep = "")
+    
     rmkdir = 
       function(path) {
         if(!rmr2:::hdfs.test("-e", path)) {
           rmkdir(dirname(path))
           rmr2:::hdfs.mkdir(path)}}
+
+    map.outdir = file.path(".", rmr2:::current.job(), "map")
+    rmkdir(map.outdir)
+    combine.outdir = file.path(".", rmr2:::current.job(), "combine")
+    rmkdir(combine.outdir)
   ')  
     map.line = '  
   rmr2:::map.loop(
@@ -284,7 +287,7 @@ rmr.stream =
       if(is.null(reduce)) 
         output.writer()
       else 
-        default.writer(map.template),
+        default.writer(map.outdir),
     profile = profile.nodes,
     combine = in.memory.combine,
     vectorized = vectorized.reduce)})()'
@@ -295,17 +298,17 @@ rmr.stream =
     keyval.reader = 
       default.reader(
         if(is.null(combine) || identical(combine, FALSE))
-          map.pattern
+          map.outdir
         else
-          combine.pattern), 
+          combine.outdir), 
     keyval.writer = output.writer(),
     profile = profile.nodes)})()'
     combine.line = '  
   rmr2:::reduce.loop(
     reduce = combine, 
     vectorized = vectorized.reduce,
-    keyval.reader = default.reader(map.pattern),
-    keyval.writer = default.writer(combine.template), 
+    keyval.reader = default.reader(map.outdir),
+    keyval.writer = default.writer(combine.outdir), 
   profile = profile.nodes)})()'
     
     map.file = tempfile(pattern = "rmr-streaming-map")
