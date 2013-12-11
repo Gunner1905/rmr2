@@ -337,6 +337,8 @@ make.section =
 
 make.keyval.readwriter = 
   function(fname, format, is.read) {
+    if(length(fname) > 1)
+      fname = current.input()
     if(!is.null(format$sections)) {
       if(!is.read) dfs.mkdir(fname)
       fname = file.path(fname, format$sections) }
