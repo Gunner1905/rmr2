@@ -326,6 +326,15 @@ open.stdinout =
 
 #opens all required connections for a format. If in a task, replace first connection with stdin or out and
 #make all the other names unique before opening
+
+get.section = 
+  function(fname)
+    arrange(dfs.du(dirname(fname), basename(fname)), -size)$path[1]
+
+make.section =
+  function(fname)        
+    paste(c(fname, if(in.a.task()) current.task()), collapse = "-")
+
 make.keyval.readwriter = 
   function(fname, format, is.read) {
     if(!is.null(format$sections)) {
@@ -342,7 +351,10 @@ make.keyval.readwriter =
           fname,
           function(fn) 
             file(
-              fn, 
+              if(is.read)
+                get.section(fn)
+              else
+                make.section(fn), 
               paste(
                 if(is.read) "r" else "w", 
                 if(format$mode == "text") "" else "b",
