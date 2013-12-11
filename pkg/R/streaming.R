@@ -278,6 +278,11 @@ rmr.stream =
     map.template = paste("./", map.pattern, "-", rmr2:::current.task(), sep = "")
     combine.pattern = paste("rmr2-combine-template", rmr2:::current.job(), sep = "-")
     combine.template = paste("./", combine.pattern, "-", rmr2:::current.task(), sep = "")
+    rmkdir = 
+      function(path) {
+        if(!rmr2:::hdfs.test("-e", path)) {
+          rmkdir(dirname(path))
+          rmr2:::hdfs.mkdir(path)}}
   ')  
     map.line = '  
   rmr2:::map.loop(
