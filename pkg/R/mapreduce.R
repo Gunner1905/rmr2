@@ -332,10 +332,27 @@ current.job =
     id = Sys.getenv("mapred_job_id")
     if (id == "") NULL else id }
 
+rmr.normalize.path = 
+  function(url.or.path) {
+    if(.Platform$OS.type == "windows")
+      url.or.path = gsub("\\\\","/", url.or.path)
+    gsub(
+      "/+", 
+      "/", 
+      paste(
+        "/", 
+        gsub(
+          "part-[0-9]+$", 
+          "", 
+          parse_url(url.or.path)$path), 
+        "/", 
+        sep = ""))}
+
 current.input = 
   function() {
     fname = Sys.getenv("map_input_file")
-    if (fname == "") NULL else fname }
+    if (fname == "") NULL 
+    else rmr.normalize.path(fname)}
 
 dfs.tempfile = function(pattern = "file", tmpdir = rmr.options("dfs.tempdir")) {
   if(is.null(tmpdir)) { 
@@ -451,25 +468,11 @@ equijoin =
                lapply(values(kv),
                       function(v) {
                         list(val = v, is.left = is.left)}))}
-    rmr.normalize.path = 
-      function(url.or.path) {
-        if(.Platform$OS.type == "windows")
-          url.or.path = gsub("\\\\","/", url.or.path)
-        gsub(
-          "/+", 
-          "/", 
-          paste(
-            "/", 
-            gsub(
-              "part-[0-9]+$", 
-              "", 
-              parse_url(url.or.path)$path), 
-            "/", 
-            sep = ""))}
+ 
     is.left.side = 
       function(left.input) {
         rmr.normalize.path(to.dfs.path(left.input)) ==
-          rmr.normalize.path(current.input())}
+          current.input()}
     reduce.split =
       function(vv) {
         tapply(
